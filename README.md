@@ -2,7 +2,7 @@
 
 This script gives your players an easy way to get around for cheap! Allow them to rent scooters and get around easier before purchasing a vehicle!
 
-# Demo: 
+# Demo: https://youtu.be/_bVJyMW4yhU
 
 # Requirements
 - THIS SCOOTER MODEL (https://www.gta5-mods.com/vehicles/portuguese-electric-sharing-scooter-addon-livery-map-editor-xml)
