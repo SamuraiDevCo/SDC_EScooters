@@ -13,6 +13,8 @@ SDC.Identifier = "license" --Can be one of the following: ["license", "steam", "
 SDC.SyncTimer = 5 --How often you want to server to keep updating the client to ensure a full sync (In Seconds)
 
 SDC.PricePerMin = 0.5 --Money per minute (Will round if decimal)
+
+SDC.PersistantScooters = true --If you want the scooters to TP back to their orginal position when rental time is up!
 ---------------------------------------------------------------------------------
 -------------------------------Scooter Configs-----------------------------------
 ---------------------------------------------------------------------------------
@@ -27,6 +29,8 @@ SDC.HighlightedColor = {r = 239, g = 245, b = 66, a = 200} --The color used when
 SDC.DrawScooterIcon = {Enabled = true, DistanceToSee = 10} --If you want it to draw the 3D Icon on top of the scooters!
 
 SDC.DrawScooterBlips = {Enabled = false, Sprite = 494, Color = 5, Size = 0.5} --If you want to draw blips for all available scooters!
+SDC.ShowOnlyNearbyScooterBlips = true --This will only show nearby scooter blips instead of all scooter blips
+SDC.ShowOnlyNearbyScooterBlipsDistance = 100 --This is the distance you have to be from the scooter for it to show the blip
 
 SDC.ScooterMenuKeybind = 38 --The keybind to open the scooter menu (IF CHANGED MAKE SURE TO CHANGE LANG!) https://docs.fivem.net/docs/game-references/controls/
 ---------------------------------------------------------------------------------

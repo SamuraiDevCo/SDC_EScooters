@@ -118,12 +118,19 @@ Citizen.CreateThread(function()
                     end
                     Citizen.Wait(500)
                     if DoesEntityExist(serverScoots[k].Vdata) then
-                        cc = GetEntityCoords(serverScoots[k].Vdata)
-                        allScoots[k].Coords = vec4(cc.x, cc.y, cc.z, GetEntityHeading(serverScoots[k].Vdata))
-                        DeleteEntity(serverScoots[k].Vdata)
-                        serverScoots[k] = nil
-                        allScoots[k].Localize = true
-                        TriggerClientEvent("SDES:Client:UpdateScootTable", -1, allScoots, serverScoots)
+                        if not SDC.PersistantScooters then
+                            DeleteEntity(serverScoots[k].Vdata)
+                            serverScoots[k] = nil
+                            allScoots[k].Localize = true
+                            TriggerClientEvent("SDES:Client:UpdateScootTable", -1, allScoots, serverScoots)
+                        else
+                            cc = GetEntityCoords(serverScoots[k].Vdata)
+                            allScoots[k].Coords = vec4(cc.x, cc.y, cc.z, GetEntityHeading(serverScoots[k].Vdata))
+                            DeleteEntity(serverScoots[k].Vdata)
+                            serverScoots[k] = nil
+                            allScoots[k].Localize = true
+                            TriggerClientEvent("SDES:Client:UpdateScootTable", -1, allScoots, serverScoots)
+                        end
                     else
                         serverScoots[k] = nil
                         allScoots[k].Localize = true

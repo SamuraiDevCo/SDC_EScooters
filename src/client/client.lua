@@ -70,15 +70,31 @@ Citizen.CreateThread(function()
 		if SDC.DrawScooterBlips.Enabled then
 			for k,v in pairs(allScoots) do
 				if not allScootBlips[k] and v.Localize then
-					local scootBlip = AddBlipForCoord(v.Coords.x, v.Coords.y, v.Coords.z)
-					SetBlipSprite(scootBlip, SDC.DrawScooterBlips.Sprite)
-					SetBlipScale(scootBlip, SDC.DrawScooterBlips.Size)
-					SetBlipColour(scootBlip, SDC.DrawScooterBlips.Color)
-					BeginTextCommandSetBlipName("STRING")
-					AddTextComponentString(SDC.Lang.ScooterMain3)
-					EndTextCommandSetBlipName(scootBlip)
-					allScootBlips[k] = scootBlip
+					if SDC.ShowOnlyNearbyScooterBlips and Vdist(pcoords.x, pcoords.y, pcoords.z, v.Coords) <= SDC.ShowOnlyNearbyScooterBlipsDistance then
+						local scootBlip = AddBlipForCoord(v.Coords.x, v.Coords.y, v.Coords.z)
+						SetBlipSprite(scootBlip, SDC.DrawScooterBlips.Sprite)
+						SetBlipScale(scootBlip, SDC.DrawScooterBlips.Size)
+						SetBlipColour(scootBlip, SDC.DrawScooterBlips.Color)
+						BeginTextCommandSetBlipName("STRING")
+						AddTextComponentString(SDC.Lang.ScooterMain3)
+						EndTextCommandSetBlipName(scootBlip)
+						allScootBlips[k] = scootBlip
+					elseif not SDC.ShowOnlyNearbyScooterBlips then
+						local scootBlip = AddBlipForCoord(v.Coords.x, v.Coords.y, v.Coords.z)
+						SetBlipSprite(scootBlip, SDC.DrawScooterBlips.Sprite)
+						SetBlipScale(scootBlip, SDC.DrawScooterBlips.Size)
+						SetBlipColour(scootBlip, SDC.DrawScooterBlips.Color)
+						BeginTextCommandSetBlipName("STRING")
+						AddTextComponentString(SDC.Lang.ScooterMain3)
+						EndTextCommandSetBlipName(scootBlip)
+						allScootBlips[k] = scootBlip
+					end
 				elseif allScootBlips[k] and not v.Localize then
+					RemoveBlip(allScootBlips[k])
+					allScootBlips[k] = nil
+				end
+
+				if SDC.ShowOnlyNearbyScooterBlips and allScootBlips[k] and Vdist(pcoords.x, pcoords.y, pcoords.z, v.Coords) > SDC.ShowOnlyNearbyScooterBlipsDistance then
 					RemoveBlip(allScootBlips[k])
 					allScootBlips[k] = nil
 				end
@@ -205,7 +221,7 @@ Citizen.CreateThread(function()
 	while true do
 		local ped = PlayerPedId()
 		local veh = GetVehiclePedIsIn(ped, false)
-		if veh ~= 0 then
+		if veh ~= 0 and not SDC.PersistantScooters then
 			local plate = GetVehicleNumberPlateText(veh)
 			local vcoords = GetEntityCoords(veh)
 			if string.match(plate, "LEMON") then
