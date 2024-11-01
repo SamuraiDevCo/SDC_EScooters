@@ -15,6 +15,15 @@ function GiveKeysToVehicle(veh)
     end
 end
 
+function RemoveKeysFromVehicle(veh)
+    if SDC.Framework == "qb-core" then
+        local plate = QBCore.Functions.GetPlate(veh)
+
+    else
+        --Here is where you would put your resource for vehicle keys!
+    end
+end
+
 function AddTargetToScooter(veh, eventtotrigger, plate)
     if SDC.Target == "qb-target" then
         exports['qb-target']:AddTargetEntity(veh, { 

@@ -116,21 +116,14 @@ Citizen.CreateThread(function()
                         TriggerClientEvent("SDES:Client:GetOffScooter", identToSrc[serverScoots[k].Owner], k)
                         TriggerClientEvent("SDES:Client:Notification", identToSrc[serverScoots[k].Owner], SDC.Lang.ScooterRentalExpired.." ("..k..")", "error")
                     end
-                    Citizen.Wait(500)
+                    Citizen.Wait(1500)
                     if DoesEntityExist(serverScoots[k].Vdata) then
-                        if not SDC.PersistantScooters then
-                            DeleteEntity(serverScoots[k].Vdata)
-                            serverScoots[k] = nil
-                            allScoots[k].Localize = true
-                            TriggerClientEvent("SDES:Client:UpdateScootTable", -1, allScoots, serverScoots)
-                        else
-                            cc = GetEntityCoords(serverScoots[k].Vdata)
-                            allScoots[k].Coords = vec4(cc.x, cc.y, cc.z, GetEntityHeading(serverScoots[k].Vdata))
-                            DeleteEntity(serverScoots[k].Vdata)
-                            serverScoots[k] = nil
-                            allScoots[k].Localize = true
-                            TriggerClientEvent("SDES:Client:UpdateScootTable", -1, allScoots, serverScoots)
-                        end
+                        cc = GetEntityCoords(serverScoots[k].Vdata)
+                        allScoots[k].Coords = vec4(cc.x, cc.y, cc.z, GetEntityHeading(serverScoots[k].Vdata))
+                        DeleteEntity(serverScoots[k].Vdata)
+                        serverScoots[k] = nil
+                        allScoots[k].Localize = true
+                        TriggerClientEvent("SDES:Client:UpdateScootTable", -1, allScoots, serverScoots)
                     else
                         serverScoots[k] = nil
                         allScoots[k].Localize = true

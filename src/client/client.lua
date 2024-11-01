@@ -70,31 +70,15 @@ Citizen.CreateThread(function()
 		if SDC.DrawScooterBlips.Enabled then
 			for k,v in pairs(allScoots) do
 				if not allScootBlips[k] and v.Localize then
-					if SDC.ShowOnlyNearbyScooterBlips and Vdist(pcoords.x, pcoords.y, pcoords.z, v.Coords) <= SDC.ShowOnlyNearbyScooterBlipsDistance then
-						local scootBlip = AddBlipForCoord(v.Coords.x, v.Coords.y, v.Coords.z)
-						SetBlipSprite(scootBlip, SDC.DrawScooterBlips.Sprite)
-						SetBlipScale(scootBlip, SDC.DrawScooterBlips.Size)
-						SetBlipColour(scootBlip, SDC.DrawScooterBlips.Color)
-						BeginTextCommandSetBlipName("STRING")
-						AddTextComponentString(SDC.Lang.ScooterMain3)
-						EndTextCommandSetBlipName(scootBlip)
-						allScootBlips[k] = scootBlip
-					elseif not SDC.ShowOnlyNearbyScooterBlips then
-						local scootBlip = AddBlipForCoord(v.Coords.x, v.Coords.y, v.Coords.z)
-						SetBlipSprite(scootBlip, SDC.DrawScooterBlips.Sprite)
-						SetBlipScale(scootBlip, SDC.DrawScooterBlips.Size)
-						SetBlipColour(scootBlip, SDC.DrawScooterBlips.Color)
-						BeginTextCommandSetBlipName("STRING")
-						AddTextComponentString(SDC.Lang.ScooterMain3)
-						EndTextCommandSetBlipName(scootBlip)
-						allScootBlips[k] = scootBlip
-					end
+					local scootBlip = AddBlipForCoord(v.Coords.x, v.Coords.y, v.Coords.z)
+					SetBlipSprite(scootBlip, SDC.DrawScooterBlips.Sprite)
+					SetBlipScale(scootBlip, SDC.DrawScooterBlips.Size)
+					SetBlipColour(scootBlip, SDC.DrawScooterBlips.Color)
+					BeginTextCommandSetBlipName("STRING")
+					AddTextComponentString(SDC.Lang.ScooterMain3)
+					EndTextCommandSetBlipName(scootBlip)
+					allScootBlips[k] = scootBlip
 				elseif allScootBlips[k] and not v.Localize then
-					RemoveBlip(allScootBlips[k])
-					allScootBlips[k] = nil
-				end
-
-				if SDC.ShowOnlyNearbyScooterBlips and allScootBlips[k] and Vdist(pcoords.x, pcoords.y, pcoords.z, v.Coords) > SDC.ShowOnlyNearbyScooterBlipsDistance then
 					RemoveBlip(allScootBlips[k])
 					allScootBlips[k] = nil
 				end
@@ -212,7 +196,31 @@ AddEventHandler("SDES:Client:GetOffScooter", function(plate)
 	local veh = GetVehiclePedIsIn(ped, false)
 
 	if veh ~= 0 and GetVehicleNumberPlateText(veh) == plate then
+		RemoveKeysFromVehicle(veh)
 		TaskLeaveVehicle(ped, veh, 256)
+	else
+		local daveh = nil
+		local timeout = 0
+		repeat
+			for veh in EnumerateVehicles() do
+				if GetVehicleNumberPlateText(veh) == plate then
+					daveh = veh
+				end
+			end
+	
+			if not daveh then
+				timeout = timeout + 1
+				Wait(500)
+			else
+				Wait(1)
+			end
+			
+			if timeout > 10 then
+				print("^1Issue Retrieving Plate For Keys^0")
+				return
+			end
+		until daveh
+		RemoveKeysFromVehicle(daveh)
 	end
 end)
 
@@ -221,7 +229,7 @@ Citizen.CreateThread(function()
 	while true do
 		local ped = PlayerPedId()
 		local veh = GetVehiclePedIsIn(ped, false)
-		if veh ~= 0 and not SDC.PersistantScooters then
+		if veh ~= 0 then
 			local plate = GetVehicleNumberPlateText(veh)
 			local vcoords = GetEntityCoords(veh)
 			if string.match(plate, "LEMON") then
